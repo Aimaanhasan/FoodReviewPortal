@@ -1,0 +1,109 @@
+﻿
+@model PagedList.IPagedList<FoodReview.Models.Restaurants>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="jumbotron" style="background-image: url('/Images/foodbg.jpeg'); background-repeat: no-repeat; background-size: cover;">
+    <h2 style="background: rgb(255, 255, 255,0.5); ">FOOD REVIEWS FROM KARACHI'S BEST RESTAURANTS</h2>
+
+
+</div>
+
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@using (Html.BeginForm("Index", "Restaurant", FormMethod.Get))
+{
+    <p>
+        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
+
+<div class="row" style="max-height:2000%;  ">
+    @foreach (var item in Model)
+    {
+        if (item.isApproved)
+        {
+            <div class="col-md-3">
+                <div class="thumbnail">
+
+                    <a href="@Url.Action("Details/" + item.ID, "Restaurant")" class="thumbnail" , alt=" ">
+                        <img src="~/File?id=@item.Files.First().FileId" alt="..." width="800" height="800">
+                    </a>
+                    <div class="caption">
+                        <h3> @Html.DisplayFor(modelItem => item.Name)</h3>
+                        @Html.DisplayFor(modelItem => item.Type)
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@if(User.IsInRole("Admin"))
+{
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Type", "Index", new { sortOrder = ViewBag.TypeSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        @if (User.IsInRole("Admin"))
+        {
+            <th> is approved       </th>}
+
+    </tr>
+    @foreach (var item in Model)
+    {
+        if (User.IsInRole("Admin"))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.isApproved)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+        }
+
+        if (!User.IsInRole("Admin") && (item.isApproved))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+
+            </tr>
+        }
+    }
+
+</table>
+}
+
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+

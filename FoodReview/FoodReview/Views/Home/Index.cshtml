@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron" style="background-image: url('/Images/foodbg.jpeg'); background-repeat: no-repeat; background-size: cover;">
+    <h1 style="background: rgb(255, 255, 255,0.5); ">Food Reviewer</h1>
+    <p class="lead" style="background: rgb(255, 255, 255,0.5) ">Food Reviewer is a platform to help you decide a nice place to Eat. It shows past experiences of people at different Restaurants which helps you choosing the best one for everyone else.</p>
+
+
+</div>
+<div style="text-align:center; ">
+@using (Html.BeginForm("Index", "Restaurant", FormMethod.Get))
+{
+    <p>
+        Restaurant Name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" />
+    </p>
+}
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Search</h2>
+        <p>
+            Search for any Restaurants in Karachi.
+
+        </p>
+
+
+    </div>
+    <div class="col-md-4">
+        <h2>New Restaurants</h2>
+        <p>Can't Find what you're looking for? Sign up and update now.</p>
+
+    </div>
+    <div class="col-md-4">
+        <h2>Comment</h2>
+        <p>Share your own experience with others by commenting and giving ratings</p>
+
+    </div>
+</div>
+
+
+
+

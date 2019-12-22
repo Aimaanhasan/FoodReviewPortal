@@ -8,7 +8,7 @@ namespace WEBDEVPROJECT.Models
     public class Restaurants
     {
         
-        public int RestaurntID { get; set; }
+        public int RestaurantsID { get; set; }
         public string RestName { get; set; }
         public string ResType { get; set; }
         public string ResLocation { get; set; }
